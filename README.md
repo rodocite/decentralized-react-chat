@@ -22,3 +22,4 @@ Todo:
 - Read up on Whisper model - DHT / messaging and send a message to myself
 - Discover message -> Whisper uses "Topics" to discover messages
 - Allow multiple nodes to send messages
+- Cleanup unused packages
