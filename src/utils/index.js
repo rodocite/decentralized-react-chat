@@ -1,5 +1,5 @@
 export const toHex = (str) => {
-  var hex = ''
+  let hex = ''
   for(var i = 0; i < str.length; i++) {
     hex = hex + '' + str.charCodeAt(i).toString(16)
   }
