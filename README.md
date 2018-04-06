@@ -17,3 +17,8 @@ npm install
 npm run blockchain
 npm start
 ```
+
+Successfully broadcasting and capturing using the Whisper protocol. Need to read up more to find out:
+
+- How to send text (payload needs to be in hexadecimal)
+- Role of symLinkId and topics
