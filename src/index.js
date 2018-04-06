@@ -8,6 +8,7 @@ import reducers from './reducers'
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 import { latestMessage } from './actions'
+import { toAscii, toHex } from './utils'
 
 import shh from './whisper'
 
@@ -23,11 +24,11 @@ Promise.all([
 ])
 .then((identities) => {
   shh.subscribe('messages', {
-    symKeyID: identities[0],
+    symKeyID: "70177e2cd480258bafc10630903460b12344cbb79da77e83c44570d0d16e6803",
     topics: ['0xffaadd11']
   })
   .on('data', (message) => {
-    store.dispatch(latestMessage(message))
+    store.dispatch(latestMessage(toAscii(message.payload)))
   })
 
   return identities
@@ -35,16 +36,14 @@ Promise.all([
 .then((identities) => {
   const postMessage = (message) => {
     shh.post({
-      symKeyID: identities[0],
+      symKeyID: "70177e2cd480258bafc10630903460b12344cbb79da77e83c44570d0d16e6803",
       sig: identities[1],
       ttl: 10,
       topic: '0xffaadd11',
-      payload: message,
+      payload: toHex(message),
       powTime: 3,
       powTarget: 0.5
     })
-
-    shh.getInfo().then(console.log)
   }
 
   ReactDOM.render(

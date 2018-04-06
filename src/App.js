@@ -14,7 +14,7 @@ class App extends Component {
     const { message } = this.props
     return (
       <div className="App">
-        <div>{ message && message.payload }</div>
+        <div>{ message && message }</div>
       </div>
     )
   }
