@@ -1,4 +1,4 @@
-#React DApp Chat
+# React DApp Chat
 
 I wanted to try and create a DApp chat app using React after reading a few Web3 articles.
 
