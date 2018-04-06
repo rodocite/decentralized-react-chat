@@ -12,14 +12,8 @@ TODO: These commands are not currently in the right order. Just adding them here
 ```
 brew tap ethereum/ethereum
 brew install ethereum
-geth --rpc --port 8545 --verbosity 2 --shh --rpccorsdomain "*" --dev
+geth --rpc --shh --rpccorsdomain "http://localhost:3000" --dev --ws --wsorigins "*"
 npm install
 npm run blockchain
 npm start
 ```
-
-Todo:
-- Read up on Whisper model - DHT / messaging and send a message to myself
-- Discover message -> Whisper uses "Topics" to discover messages
-- Allow multiple nodes to send messages
-- Cleanup unused packages
