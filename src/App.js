@@ -1,41 +1,30 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getAccountData } from './actions'
-import * as todo from './todo'
+import { getPeerCount } from './actions'
 import './App.css'
 
 class App extends Component {
-  state = {
-    balance: 0,
-    stake: 1,
-    todos: {},
-    user: null
-  }
-
-  componentDidMount() {
-
-  }
-
   render() {
+    const { peerCount } = this.props
+
     return (
       <div className="App">
-        <div>Account: { this.props.user }</div>
-        <div>Balance: { this.props.balance }</div>
+        <div>Peer Count: { peerCount }</div>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => {
+  const { peerCount } = state
   return {
-    user: state.user,
-    balance: state.balance
+    peerCount
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getAccountData: dispatch(getAccountData())
+    getPeerCount: dispatch(getPeerCount())
   }
 }
 

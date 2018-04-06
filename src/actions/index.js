@@ -1,18 +1,11 @@
-import * as user from '../user'
+import shh from '../whisper'
 
-export const getAccountData = () => {
+// Adding this here so I can play around with the methods in browser console
+window.shh = shh
+
+export const getPeerCount = () => {
   return {
-    type: 'ACCOUNT_DATA',
-    payload: getUser()
-  }
-}
-
-async function getUser() {
-  const accounts = await user.getAccounts()
-  const balance = await user.getBalance(accounts[1])
-
-  return {
-    balance,
-    user: accounts[1]
+    type: 'PEER_COUNT',
+    payload: shh.net.getPeerCount()
   }
 }
