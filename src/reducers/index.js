@@ -1,7 +1,7 @@
-export default (state = {}, action) => {
+export default (state = {message: ''}, action) => {
   switch (action.type) {
     case 'MESSAGE':
-      return { ...state, message: action.payload }
+      return { ...state, message: [ ...state.message, action.payload ] }
     default:
       return state
   }

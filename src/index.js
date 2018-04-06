@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-import logger from 'redux-logger'
 import promiseMiddleware from 'redux-promise';
 import reducers from './reducers'
 import App from './App'
@@ -14,7 +13,6 @@ import shh from './whisper'
 
 const store = createStore(
   reducers,
-  applyMiddleware(logger),
   applyMiddleware(promiseMiddleware),
 )
 
@@ -23,21 +21,22 @@ Promise.all([
   shh.newKeyPair()
 ])
 .then((identities) => {
-  shh.subscribe('messages', {
-    symKeyID: "70177e2cd480258bafc10630903460b12344cbb79da77e83c44570d0d16e6803",
-    topics: ['0xffaadd11']
-  })
-  .on('data', (message) => {
-    store.dispatch(latestMessage(toAscii(message.payload)))
-  })
+  const subscribe = (symKeyID = identities[0]) => {
+    shh.subscribe('messages', {
+      symKeyID,
+      topics: ['0xffaadd11']
+    })
+    .on('data', (message) => {
+      store.dispatch(latestMessage(toAscii(message.payload)))
+    })
+  }
 
-  return identities
-})
-.then((identities) => {
-  const postMessage = (message) => {
+  const postMessage = (message, symKeyID = identities[0], publicKey = identities[1]) => {
+    if (message === '' || message === null || message === undefined) return
+
     shh.post({
-      symKeyID: "70177e2cd480258bafc10630903460b12344cbb79da77e83c44570d0d16e6803",
-      sig: identities[1],
+      symKeyID,
+      sig: publicKey,
       ttl: 10,
       topic: '0xffaadd11',
       payload: toHex(message),
@@ -48,7 +47,12 @@ Promise.all([
 
   ReactDOM.render(
     <Provider store={ store }>
-      <App postMessage={ postMessage } />
+      <App
+        postMessage={ postMessage }
+        subscribe={ subscribe }
+        symKeyID={ identities[0] }
+        publicKey={ identities[1] }
+      />
     </Provider>,
     document.getElementById('root')
   )
