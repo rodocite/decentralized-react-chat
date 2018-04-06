@@ -13,7 +13,7 @@ import shh from './whisper'
 
 const store = createStore(
   reducers,
-  applyMiddleware(promiseMiddleware),
+  applyMiddleware(promiseMiddleware)
 )
 
 Promise.all([
