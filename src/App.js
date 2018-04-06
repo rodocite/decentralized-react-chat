@@ -1,31 +1,30 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getPeerCount } from './actions'
 import './App.css'
 
 class App extends Component {
-  render() {
-    const { peerCount } = this.props
+  componentDidMount() {
+    const { postMessage } = this.props
 
+    // So I can test out sending messages to geth
+    window.pp = postMessage
+  }
+
+  render() {
+    const { message } = this.props
     return (
       <div className="App">
-        <div>Peer Count: { peerCount }</div>
+        <div>{ message && message.payload }</div>
       </div>
-    );
+    )
   }
 }
 
 const mapStateToProps = (state) => {
-  const { peerCount } = state
+  const { message } = state
   return {
-    peerCount
+    message
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getPeerCount: dispatch(getPeerCount())
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);

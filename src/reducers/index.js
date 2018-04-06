@@ -1,7 +1,7 @@
 export default (state = {}, action) => {
   switch (action.type) {
-    case 'PEER_COUNT':
-      return {...state, peerCount: action.payload }
+    case 'MESSAGE':
+      return { ...state, message: action.payload }
     default:
       return state
   }
