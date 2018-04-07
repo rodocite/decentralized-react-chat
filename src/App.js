@@ -3,16 +3,16 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 
 const Container = styled.div`
-  box-sizing: border-box;
-  border-radius: 10px;
-  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
 `
+
 const InputContainer = styled.section`
-  box-sizing: border-box;
   width: 100%;
 `
 const ChatBorder = styled.div`
-  box-sizing: border-box;
   width: 100%;
   height: 50px;
   border-top: 1px solid black;
@@ -33,19 +33,17 @@ const ChatInput = styled.input`
 `
 
 const Chatbox = styled.div`
-  box-sizing: border-box;
-  height: 300px;
   width: 100%;
+  height: 100%;
+  padding: 10px;
   overflow-y: auto;
   word-wrap: break-word;
 `
 
 const Message = styled.div`
-  padding: 5px 10px 5px 10px;
 `
 
 const SubscriptionSection = styled.section`
-  padding: 15px;
   border-bottom: 1px solid black;
   text-align: center;
 `
@@ -81,7 +79,7 @@ class App extends Component {
     return (
       <Container>
         <SubscriptionSection>
-          <div>{ this.state.symKey || symKeyID }</div>
+          {/* <div>{ this.state.symKey || symKeyID }</div> */}
           <InputContainer>
             <input onChange={(e) => this.setState({ symKeyInput: e.target.value })} />
             <button onClick={(e) => this.subscribe(this.state.symKeyInput)}>Change Room</button>
