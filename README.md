@@ -22,3 +22,5 @@ Successfully broadcasting and capturing using the Whisper protocol. Need to read
 
 - How to send text (payload needs to be in hexadecimal)
 - Role of symLinkId and topics
+- Deploy blocked -- subscribe requires ws://, but that is incompatible with https://
+- Research Metamask & Truffle
