@@ -15,7 +15,7 @@ const InputContainer = styled.section`
 const ChatBorder = styled.div`
   width: 100%;
   height: 50px;
-  border-top: 1px solid black;
+  border-top: 1px solid gray;
 `
 
 const ChatInput = styled.input`
@@ -38,9 +38,16 @@ const Chatbox = styled.div`
   padding: 10px;
   overflow-y: auto;
   word-wrap: break-word;
+  background: #f2f2f2;
 `
 
 const Message = styled.div`
+  display: inline-block;
+  margin: 10px 0;
+  border-radius: 5px;
+  background: #D9D9D9;
+  padding: 10px;
+  max-width: 100%;
 `
 
 const SubscriptionSection = styled.section`
@@ -88,7 +95,7 @@ class App extends Component {
 
         <Chatbox>
           { message && message.map((m, index) => {
-              return <Message key={index}>{m}</Message>
+              return <div><Message key={index}>{m}</Message></div>
             })
           }
         </Chatbox>
