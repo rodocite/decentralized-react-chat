@@ -24,3 +24,4 @@ Successfully broadcasting and capturing using the Whisper protocol. Need to read
 - Role of symLinkId and topics
 - Deploy blocked -- subscribe requires ws://, but that is incompatible with https://
 - Research Metamask & Truffle
+- Need a reverse proxy to access geth through SSL (https -> wss)
