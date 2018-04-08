@@ -8,12 +8,14 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background: #262626;
 `
 
 const InputContainer = styled.section`
   width: 100%;
   display: flex;
-  height: 50px;
+  height: 55px;
+  background: white;
 `
 
 const ChatInput = styled.input`
@@ -61,11 +63,15 @@ const SubscriptionSection = styled.section`
 `
 
 const NamePrompt = styled.div`
+  width: 200px;
+  height: 150px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  margin: auto 0;
+  margin: auto;
+  color: white;
+  font-weight: 700;
 `
 
 const Button = styled.button`
@@ -134,8 +140,9 @@ class App extends Component {
     return (
       <Container>
         <NamePrompt>
-          <input onChange={(e) => this.setState({ name: e.target.value })}/>
-          <Button onClick={() => this.props.setName(this.state.name)}>Let's ha!</Button>
+          <div>What's your name?</div>
+          <ChatInput onChange={(e) => this.setState({ name: e.target.value })}/>
+          <Button onClick={() => this.props.setName(this.state.name)}>Start Chat</Button>
         </NamePrompt>
       </Container>
     )
