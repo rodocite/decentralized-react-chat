@@ -109,13 +109,30 @@ const SendButton = styled.div`
   }
 `
 
+const RoomPrompt = styled.div`
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background: #262626;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+  color: white;
+  font-weight: 700;
+  z-index: 2;
+  padding: 200px 15px;
+`
+
 class App extends Component {
   state = {
     message: '',
     symKey: null,
     symKeyInput: '',
     name: '',
-    copied: false
+    copied: false,
+    showOverlay: false
   }
 
   componentDidMount() {
@@ -136,6 +153,8 @@ class App extends Component {
     this.setState({ message: '' })
   }
 
+  join
+
   renderNamePrompt() {
     return (
       <Container>
@@ -148,17 +167,34 @@ class App extends Component {
     )
   }
 
+  renderOverlay() {
+    return (
+      <RoomPrompt>
+        <div>Enter Room Hash</div>
+        <ChatInput onChange={(e) => this.setState({ symKeyInput: e.target.value })}/>
+        <div>
+          <Button onClick={() => { this.setState({ showOverlay: false }) }}>Cancel</Button>
+          <Button onClick={() => {
+            this.subscribe(this.state.symKeyInput, this.props.name)
+            this.setState({ showOverlay: false })
+          }}>Join Room</Button>
+        </div>
+      </RoomPrompt>
+    )
+  }
+
   render() {
     const { message, name, symKeyID } = this.props
 
     return name ? (
       <Container>
+        { this.state.showOverlay && this.renderOverlay() }
         <SubscriptionSection>
           <RoomHash className="hash">{ this.state.symKey || symKeyID }</RoomHash>
           <CopyToClipboard text={this.state.symKey || symKeyID} onCopy={() => this.setState({copied: true})}>
             <Button>Copy Hash</Button>
           </CopyToClipboard>
-          <Button onClick={(e) => this.subscribe(this.state.symKeyInput)}>Switch Rooms</Button>
+          <Button onClick={() => this.setState({ showOverlay: true })}>Switch Rooms</Button>
         </SubscriptionSection>
 
         <Chatbox>
