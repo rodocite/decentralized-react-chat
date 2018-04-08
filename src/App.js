@@ -163,8 +163,6 @@ class App extends Component {
     this.setState({ message: '' })
   }
 
-  join
-
   renderNamePrompt() {
     return (
       <Container>
