@@ -8,7 +8,7 @@ import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 import { latestMessage, setName } from './actions'
 import { toAscii, toHex } from './utils'
-import "./global.styles.css"
+import './global.styles.css'
 
 import shh from './whisper'
 
