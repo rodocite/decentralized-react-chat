@@ -56,6 +56,7 @@ const Name = styled.div`
 `
 
 const SubscriptionSection = styled.section`
+  padding: 15px;
   border-bottom: 1px solid black;
   text-align: center;
 `
@@ -69,18 +70,22 @@ const NamePrompt = styled.div`
 `
 
 const Button = styled.button`
-  padding: 10px;
+  padding: 8px;
   color: white;
-  font-size: 20px;
-  border-radius: 10px;
+  border: none;
   background: green;
+`
+
+const RoomHash = styled.div`
+  font-size: 8px;
+  word-wrap: break-word;
 `
 
 class App extends Component {
   state = {
     message: '',
     symKey: null,
-    symKeyInput: null,
+    symKeyInput: '',
     name: ''
   }
 
@@ -92,7 +97,7 @@ class App extends Component {
 
   subscribe(symKey) {
     this.props.subscribe(symKey)
-    this.setState({ symKey })
+    this.setState({ symKey, symKeyInput: '' })
   }
 
   postMessage(e) {
@@ -119,10 +124,10 @@ class App extends Component {
     return name ? (
       <Container>
         <SubscriptionSection>
-          <div>{ this.state.symKey || symKeyID }</div>
+          <RoomHash>{ this.state.symKey || symKeyID }</RoomHash>
           <InputContainer>
-            <input onChange={(e) => this.setState({ symKeyInput: e.target.value })} />
-            <button onClick={(e) => this.subscribe(this.state.symKeyInput)}>Change Room</button>
+            <input onChange={(e) => this.setState({ symKeyInput: e.target.value })} value={ this.state.symKeyInput }/>
+            <Button onClick={(e) => this.subscribe(this.state.symKeyInput)}>Switch Rooms</Button>
           </InputContainer>
         </SubscriptionSection>
 
