@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { findDOMNode } from 'react-dom'
 import styled from 'styled-components'
 import { setName } from './actions'
 import { connect } from 'react-redux'
@@ -155,8 +156,14 @@ class App extends Component {
   }
 
   componentDidUpdate(newProps) {
+    const chatboxEl = findDOMNode(this.chatbox)
+
     if (this.props.name !== newProps.name) {
       this.subscribe(this.props.symKey)
+    }
+
+    if (this.props.message.length !== newProps.message.length) {
+      chatboxEl.scrollTo(0, chatboxEl.scrollHeight)
     }
   }
 
@@ -214,7 +221,7 @@ class App extends Component {
           <Button onClick={() => this.setState({ showOverlay: true })}>Switch Rooms</Button>
         </SubscriptionSection>
 
-        <Chatbox>
+        <Chatbox ref={(el) => this.chatbox = el}>
           { message && message.map((m, index) => {
               const decapsulation = m.split('!encapsulation!')
               const name = decapsulation[1]
