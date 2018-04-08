@@ -149,7 +149,15 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.subscribe(this.props.symKey)
+    if (this.props.name) {
+      this.subscribe(this.props.symKey)
+    }
+  }
+
+  componentDidUpdate(newProps) {
+    if (this.props.name !== newProps.name) {
+      this.subscribe(this.props.symKey)
+    }
   }
 
   subscribe(symKey) {
