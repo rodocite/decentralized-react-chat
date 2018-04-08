@@ -187,7 +187,7 @@ class App extends Component {
         <div>
           <Button onClick={() => { this.setState({ showOverlay: false }) }}>Cancel</Button>
           <Button onClick={() => {
-            this.subscribe(this.state.symKeyInput, this.props.name)
+            this.subscribe(this.state.symKeyInput)
             this.setState({ showOverlay: false })
           }}>Join Room</Button>
         </div>
