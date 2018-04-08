@@ -148,9 +148,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (!this.state.symKey && this.props.name) {
-      this.subscribe(this.props.symKey)
-    }
+    this.subscribe(this.props.symKey)
   }
 
   subscribe(symKey) {
