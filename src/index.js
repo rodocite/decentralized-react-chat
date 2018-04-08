@@ -6,7 +6,7 @@ import promiseMiddleware from 'redux-promise';
 import reducers from './reducers'
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
-import { latestMessage } from './actions'
+import { latestMessage, setName } from './actions'
 import { toAscii, toHex } from './utils'
 import "./global.styles.css"
 
@@ -22,7 +22,15 @@ Promise.all([
   shh.newKeyPair()
 ])
 .then((identities) => {
-  const subscribe = (symKeyID = identities[0]) => {
+  const subscribe = (symKeyID = identities[0], name) => {
+    const sessionName = window.sessionStorage.getItem('name')
+
+    if (sessionName) {
+      store.dispatch(setName(sessionName))
+    } else {
+      store.dispatch(setName(name))
+    }
+
     shh.subscribe('messages', {
       symKeyID,
       topics: ['0xffaadd11']
@@ -32,7 +40,7 @@ Promise.all([
     })
   }
 
-  const postMessage = (message, symKeyID = identities[0], publicKey = identities[1]) => {
+  const postMessage = (name, message, symKeyID = identities[0], publicKey = identities[1]) => {
     if (message === '' || message === null || message === undefined) return
 
     shh.post({
@@ -40,7 +48,7 @@ Promise.all([
       sig: publicKey,
       ttl: 10,
       topic: '0xffaadd11',
-      payload: toHex(message),
+      payload: toHex(message + '!encapsulation!' + name),
       powTime: 3,
       powTarget: 0.5
     })

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { setName } from './actions'
 import { connect } from 'react-redux'
 
 const Container = styled.div`
@@ -43,11 +44,15 @@ const Chatbox = styled.div`
 
 const Message = styled.div`
   display: inline-block;
-  margin: 10px 0;
+  margin-bottom: 10px
   border-radius: 5px;
   background: #D9D9D9;
   padding: 10px;
   max-width: 100%;
+`
+
+const Name = styled.div`
+  margin-top: 10px;
 `
 
 const SubscriptionSection = styled.section`
@@ -55,11 +60,28 @@ const SubscriptionSection = styled.section`
   text-align: center;
 `
 
+const NamePrompt = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto 0;
+`
+
+const Button = styled.button`
+  padding: 10px;
+  color: white;
+  font-size: 20px;
+  border-radius: 10px;
+  background: green;
+`
+
 class App extends Component {
   state = {
     message: '',
     symKey: null,
     symKeyInput: null,
+    name: ''
   }
 
   componentDidMount() {
@@ -77,16 +99,27 @@ class App extends Component {
     if (e.key !== 'Enter') return
     const { postMessage, publicKey } = this.props
     const symKey = this.state.symKey || this.props.symKey
-    postMessage(this.state.message, symKey, publicKey)
+    postMessage(this.props.name, this.state.message, symKey, publicKey)
     this.setState({ message: '' })
   }
 
-  render() {
-    const { symKeyID, message } = this.props
+  renderNamePrompt() {
     return (
       <Container>
+        <NamePrompt>
+          <input onChange={(e) => this.setState({ name: e.target.value })}/>
+          <Button onClick={() => this.props.setName(this.state.name)}>Let's chat!</Button>
+        </NamePrompt>
+      </Container>
+    )
+  }
+
+  render() {
+    const { message, name, symKeyID } = this.props
+    return name ? (
+      <Container>
         <SubscriptionSection>
-          {/* <div>{ this.state.symKey || symKeyID }</div> */}
+          <div>{ this.state.symKey || symKeyID }</div>
           <InputContainer>
             <input onChange={(e) => this.setState({ symKeyInput: e.target.value })} />
             <button onClick={(e) => this.subscribe(this.state.symKeyInput)}>Change Room</button>
@@ -95,7 +128,16 @@ class App extends Component {
 
         <Chatbox>
           { message && message.map((m, index) => {
-              return <div><Message key={index}>{m}</Message></div>
+              const decapsulation = m.split('!encapsulation!')
+              const name = decapsulation[1]
+              const msg = decapsulation[0]
+
+              return (
+                <div key={ index }>
+                  <Name>{ name }</Name>
+                  <Message>{ msg }</Message>
+                </div>
+              )
             })
           }
         </Chatbox>
@@ -111,17 +153,22 @@ class App extends Component {
           </ChatBorder>
         </InputContainer>
       </Container>
-    )
+    ) : this.renderNamePrompt()
   }
 }
 
 const mapStateToProps = (state) => {
-  const { message, signature } = state
-  console.log(signature)
+  const { message, name } = state
   return {
+    name,
     message,
-    signature
   }
 }
 
-export default connect(mapStateToProps)(App)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setName: (name) => dispatch(setName(name))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
