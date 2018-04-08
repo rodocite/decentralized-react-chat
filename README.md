@@ -1,27 +1,37 @@
-# React DApp Chat
+# Decentralized React Chat
 
-I wanted to try and create a DApp chat app using React after reading a few Web3 articles.
+The motivation for this project is to explore creating a decentralized app (DApp) using the Ethereum Blockchain Platform. It's my first decentralized application!
 
-Using some of the code in this article series as a starting point: https://blog.jaak.io/crossing-over-to-web3-an-introduction-to-decentralised-development-53de470da331
+## Whisper Protocol
+The project uses the [Whisper Protocol](https://github.com/ethereum/wiki/wiki/Whisper) on Ethereum. It does not require Smart Contracts. Whisper uses a blockchain along with a distributed hash table (DHT) to provide secure, non-location based routing for communications. It supports unicast, multicast, and broadcast. Whisper's focus is security and is not meant to be performant-- although it is probably sufficient in most use-cases for light communication.
 
-This initial commit integrates React on top of the smart contracts logic.
+## Communication Flow Summary
+Two or more users would agree on a topic, a common key, and share public IDs with each other. All three are hashed together and sent into a DHT. The protocol listens to messages matching those hashes. When a match is found, the messages are routed to the parties listening.
 
-Use NPM since Yarn doesn't seem compatible with Web3 libraries.
+## Project Details
+The project is an unpacked `create-react-app` and uses the [Web3.js](https://github.com/ethereum/web3.js/) library to communicate with a local `geth` process. [geth](https://github.com/ethereum/go-ethereum/wiki/geth) is a golang Ethereum runtime.
 
-TODO: These commands are not currently in the right order. Just adding them here for notes.
+#### geth
+I've included the `geth` binary in the repo for convenience. A popular library [ganache-cli](https://github.com/trufflesuite/ganache-cli)] does not yet have a Whisper implementation so `geth` seemed like my only option.
+
+The project runs `geth` in rpc development mode with websockets enabled. Websockets are required for the Whisper's subscribe functionality. Otherwise, the protocol would be limited to unicast only.
+
+All the chat-related code is in `/src`.
+
+#### SymLinkID, KeyPairs, Topics
+The project uses a static topic `0xffaadd11` as a common topic. However, both the common hash (symLinkID) and the public IDs (KeyPairs) are generated on mount. Users will need to join each other's symLinkID -- called `Room Hash` in the application to communicate. SymLinkID, KeyPairs, Topics are required to be in hexadecimal format when being sent into the protocol.
+
+To display identities, I've "encapsulated" each message with a `name` required from each user. The client just splits it from the converted readable string coming back from Whisper.
+
+#### Deploy Issues
+- Since `geth` does not support SSL, you need something like nginx to be able to deploy this app over https or write your own server certificates which is beyond the scope of this project.
+- There is an issue w/ Dockerizing the project due to a Web3 websocket dependency pointing to a repo without a commit hash. I'm still investigating the issue.
+
+## Running the Project
+Yarn seems to have issues with the Web3 library. Use `npm`.
+It's best viewed in iPhone mobile using Chrome (styling isn't really the scope of the project, haha).
+
 ```
-brew tap ethereum/ethereum
-brew install ethereum
-geth --rpc --shh --rpccorsdomain "http://localhost:3000" --dev --ws --wsorigins "*"
 npm install
-npm run blockchain
 npm start
 ```
-
-Successfully broadcasting and capturing using the Whisper protocol. Need to read up more to find out:
-
-- How to send text (payload needs to be in hexadecimal)
-- Role of symLinkId and topics
-- Deploy blocked -- subscribe requires ws://, but that is incompatible with https://
-- Research Metamask & Truffle
-- Need a reverse proxy to access geth through SSL (https -> wss)
