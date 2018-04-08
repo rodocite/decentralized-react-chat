@@ -9,6 +9,17 @@ const Container = styled.div`
   flex-direction: column;
   height: 100vh;
   background: #262626;
+  border: 1px solid #D9D9D9;
+  margin: auto;
+
+  @media (min-width: 425px) {
+    max-width: 425px;
+    max-height: 572px;
+  }
+
+  @media (min-width: 768px) {
+    margin: 100px auto;
+  }
 `
 
 const InputContainer = styled.section`
@@ -103,10 +114,6 @@ const SendButton = styled.div`
   font-size: 12px;
   background: ${props => props.active ? 'rgb(0,122,255)' : '#D9D9D9'};
   padding: 5px;
-
-  @media (min-width: 1024px) {
-    display: none;
-  }
 `
 
 const RoomPrompt = styled.div`
@@ -123,6 +130,11 @@ const RoomPrompt = styled.div`
   font-weight: 700;
   z-index: 2;
   padding: 200px 15px;
+
+  @media (min-width: 425px) {
+    max-width: 425px;
+    max-height: 572px;
+  }
 `
 
 class App extends Component {
