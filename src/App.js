@@ -119,13 +119,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (!this.state.symKey) {
+    if (!this.state.symKey && this.props.name) {
       this.subscribe(this.props.symKey)
     }
   }
 
   subscribe(symKey) {
-    this.props.subscribe(symKey)
+    this.props.subscribe(symKey, this.props.name)
     this.setState({ symKey, symKeyInput: '' })
   }
 
@@ -150,6 +150,7 @@ class App extends Component {
 
   render() {
     const { message, name, symKeyID } = this.props
+
     return name ? (
       <Container>
         <SubscriptionSection>

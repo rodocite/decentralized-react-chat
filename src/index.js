@@ -22,14 +22,14 @@ Promise.all([
   shh.newKeyPair()
 ])
 .then((identities) => {
-  const subscribe = (symKeyID = identities[0], name) => {
-    const sessionName = window.sessionStorage.getItem('name')
+  const sessionName = window.sessionStorage.getItem('name')
 
-    if (sessionName) {
-      store.dispatch(setName(sessionName))
-    } else {
-      store.dispatch(setName(name))
-    }
+  if (sessionName) {
+    store.dispatch(setName(sessionName))
+  }
+
+  const subscribe = (symKeyID = identities[0], name) => {
+    store.dispatch(setName(name))
 
     shh.subscribe('messages', {
       symKeyID,
