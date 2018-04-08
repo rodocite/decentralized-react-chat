@@ -5,16 +5,16 @@ import { connect } from 'react-redux'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 const Container = styled.div`
+  background: #262626;
+  border: 1px solid #D9D9D9;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #262626;
-  border: 1px solid #D9D9D9;
   margin: auto;
 
   @media (min-width: 425px) {
-    max-width: 425px;
     max-height: 572px;
+    max-width: 425px;
   }
 
   @media (min-width: 768px) {
@@ -23,76 +23,77 @@ const Container = styled.div`
 `
 
 const InputContainer = styled.section`
-  width: 100%;
+  background: white;
   display: flex;
   height: 55px;
-  background: white;
+  width: 100%;
 `
 
 const ChatInput = styled.input`
-  padding: 10px;
-  font-size: 14px;
-  box-sizing: border-box;
-  width: 100%;
-  outline: none;
   border: none;
+  box-sizing: border-box;
+  font-size: 14px;
+  outline: none;
+  padding: 10px;
+  width: 100%;
+
   ::placeholder {
     font-size: 12px;
   }
 `
 
 const Chatbox = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  overflow-y: auto;
-  word-wrap: break-word;
   background: #f2f2f2;
+  height: 100%;
+  overflow-y: auto;
+  padding: 10px;
+  width: 100%;
+  word-wrap: break-word;
 `
 
 const Message = styled.div`
+  background: ${props => props.self ? 'white' : '#D9D9D9'};
+  border-radius: 5px;
   display: inline-block;
   font-size: 14px;
   margin-bottom: 10px
-  border-radius: 5px;
-  background: ${props => props.self ? 'white' : '#D9D9D9'};
-  padding: 8px;
   max-width: 100%;
+  padding: 8px;
 `
 
 const Name = styled.div`
-  margin-top: 10px;
   font-size: 12px;
+  margin-top: 10px;
 `
 
 const SubscriptionSection = styled.section`
-  padding: 15px;
-  border-bottom: 1px solid black;
-  text-align: center;
   background: #262626;
+  border-bottom: 1px solid black;
   color: white;
+  padding: 15px;
+  text-align: center;
 `
 
 const NamePrompt = styled.div`
-  width: 200px;
-  height: 150px;
+  align-items: center;
+  color: white;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  margin: auto;
-  color: white;
   font-weight: 700;
+  height: 150px;
+  justify-content: space-around;
+  margin: auto;
+  width: 200px;
 `
 
 const Button = styled.button`
-  padding: 8px;
-  margin: 0 10px;
-  border-radius: 5px;
-  color: white;
-  border: none;
   background: rgb(0,122,255);
+  border-radius: 5px;
+  border: none;
+  color: white;
+  margin: 0 10px;
   outline: none;
+  padding: 8px;
   transition: all 0.02s ease-in;
 
   :active {
@@ -103,33 +104,33 @@ const Button = styled.button`
 
 const RoomHash = styled.div`
   font-size: 12px;
-  word-wrap: break-word;
   margin-bottom: 15px;
+  word-wrap: break-word;
 `
 
 const SendButton = styled.div`
-  margin: 5px;
+  background: ${props => props.active ? 'rgb(0,122,255)' : '#D9D9D9'};
   border-radius: 5px;
   color: white;
   font-size: 12px;
-  background: ${props => props.active ? 'rgb(0,122,255)' : '#D9D9D9'};
+  margin: 5px;
   padding: 5px;
 `
 
 const RoomPrompt = styled.div`
-  position: fixed;
-  height: 100vh;
-  width: 100vw;
+  align-items: center;
   background: #262626;
+  color: white;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  margin: auto;
-  color: white;
   font-weight: 700;
-  z-index: 2;
+  height: 100vh;
+  justify-content: space-between;
+  margin: auto;
   padding: 200px 15px;
+  position: fixed;
+  width: 100vw;
+  z-index: 2;
 
   @media (min-width: 425px) {
     max-width: 425px;
@@ -139,12 +140,12 @@ const RoomPrompt = styled.div`
 
 class App extends Component {
   state = {
-    message: '',
-    symKey: null,
-    symKeyInput: '',
-    name: '',
     copied: false,
-    showOverlay: false
+    message: '',
+    name: '',
+    showOverlay: false,
+    symKey: null,
+    symKeyInput: ''
   }
 
   componentDidMount() {
