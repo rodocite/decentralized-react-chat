@@ -1,5 +1,7 @@
 # Decentralized React Chat
 
+![](https://github.com/rodocite/decentralized-react-chat/chatty.gif)
+
 The motivation for this project is to explore creating a decentralized app (DApp) using the Ethereum Blockchain Platform. It's my first decentralized application!
 
 ## Whisper Protocol
