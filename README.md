@@ -1,6 +1,6 @@
 # Decentralized React Chat
 
-![](https://github.com/rodocite/decentralized-react-chat/blob/master/chatty.gif)
+![](https://github.com/rodocite/decentralized-react-chat/blob/master/chatty.png)
 
 The motivation for this project is to explore creating a decentralized app (DApp) using the Ethereum Blockchain Platform. It's my first decentralized application!
 
@@ -14,7 +14,7 @@ Two or more users would agree on a topic, a common key, and share public IDs wit
 The project is an unpacked `create-react-app` and uses the [Web3.js](https://github.com/ethereum/web3.js/) library to communicate with a local `geth` process. [geth](https://github.com/ethereum/go-ethereum/wiki/geth) is a golang Ethereum runtime.
 
 #### geth
-I've included the `geth` binary in the repo for convenience. A popular library [ganache-cli](https://github.com/trufflesuite/ganache-cli)] does not yet have a Whisper implementation so `geth` seemed like my only option.
+I've included the `geth` binary in the repo for convenience. A popular library [ganache](https://github.com/trufflesuite/ganache-cli)] does not yet have a Whisper implementation so `geth` seemed like my only option.
 
 The project runs `geth` in rpc development mode with websockets enabled. Websockets are required for the Whisper's subscribe functionality. Otherwise, the protocol would be limited to unicast only.
 
@@ -31,7 +31,6 @@ To display identities, I've "encapsulated" each message with a `name` required f
 
 ## Running the Project
 Yarn seems to have issues with the Web3 library. Use `npm`.
-It's best viewed in iPhone mobile using Chrome (styling isn't really the scope of the project, haha).
 
 ```
 npm install
