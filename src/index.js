@@ -5,7 +5,6 @@ import { Provider } from 'react-redux'
 import promiseMiddleware from 'redux-promise';
 import reducers from './reducers'
 import App from './App'
-import registerServiceWorker from './registerServiceWorker'
 import { latestMessage, setName } from './actions'
 import { toAscii, toHex } from './utils'
 import './global.styles.css'
@@ -67,5 +66,3 @@ Promise.all([
     document.getElementById('root')
   )
 })
-
-registerServiceWorker()
