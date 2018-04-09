@@ -65,7 +65,7 @@ class App extends Component {
     return (
       <RoomPrompt>
         <div>Enter Room Hash</div>
-        <ChatInput onChange={(e) => this.setState({ symKeyInput: e.target.value })}/>
+        <ChatInput onChange={(e) => this.setState({ symKeyInput: e.target.value })} />
         <div>
           <Button onClick={() => this.showOverlay(false)}>Cancel</Button>
           <Button onClick={() => {
