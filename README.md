@@ -25,6 +25,11 @@ The project uses a static topic `0xffaadd11` as a common topic. However, both th
 
 To display identities, I've "encapsulated" each message with a `name` required from each user. The client just splits it from the converted readable string coming back from Whisper.
 
+#### Settings - TTL, Proof of Work, etc
+There are several settings for the protocol. For the most part, I kept them at default because they were ideal for a chat project. TTL, for example, is at 10 seconds. This means the message will live on the Ethereum network for that long.
+
+I plan to start another project to go in depth with topics, hashes, pow, and ttl. Possibly a Twitter or CL style app.
+
 #### Deploy Issues
 - Since `geth` does not support SSL, you need something like nginx to be able to deploy this app over https or write your own server certificates which is beyond the scope of this project.
 - There is an issue w/ Dockerizing the project due to a Web3 websocket dependency pointing to a repo without a commit hash. I'm still investigating the issue.
