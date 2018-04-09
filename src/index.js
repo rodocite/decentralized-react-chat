@@ -28,15 +28,24 @@ Promise.all([
   }
 
   const subscribe = (symKeyID = identities[0], name) => {
-    store.dispatch(setName(name))
-
-    shh.subscribe('messages', {
+    const options = {
       symKeyID,
       topics: ['0xffaadd11']
-    })
-    .on('data', (message) => {
-      store.dispatch(latestMessage(toAscii(message.payload)))
-    })
+    }
+
+    store.dispatch(setName(name))
+
+    shh.getInfo().then(console.log)
+
+    shh.newMessageFilter(options)
+      .then((id) => shh.getFilterMessages(id))
+      .then(messages => console.log)
+      .then(() => {
+        shh.subscribe('messages', options)
+          .on('data', (message) => {
+            store.dispatch(latestMessage(toAscii(message.payload)))
+          })
+      })
   }
 
   const postMessage = (name, message, symKeyID = identities[0], publicKey = identities[1]) => {
