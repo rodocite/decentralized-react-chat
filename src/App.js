@@ -110,10 +110,13 @@ const RoomHash = styled.div`
 `
 
 const SendButton = styled.div`
+  align-items: center;
   background: ${props => props.active ? 'rgb(0,122,255)' : '#D9D9D9'};
   border-radius: 5px;
   color: white;
+  display: flex;
   font-size: 12px;
+  justify-content: center;
   margin: 5px;
   padding: 5px;
 `
