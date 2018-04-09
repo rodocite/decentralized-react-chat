@@ -210,12 +210,30 @@ class App extends Component {
     )
   }
 
+  renderMessages() {
+    const { message } = this.props
+
+    return message && message.map((m, index) => {
+      const decapsulation = m.split('!encapsulation!')
+      const name = decapsulation[1]
+      const msg = decapsulation[0]
+
+      return (
+        <div key={ index }>
+          <Name>{ name }</Name>
+          <Message self={ this.props.name !== name }>{ msg }</Message>
+        </div>
+      )
+    })
+  }
+
   render() {
-    const { message, name, symKeyID } = this.props
+    const { name, symKeyID } = this.props
 
     return name ? (
       <Container>
         { this.state.showOverlay && this.renderOverlay() }
+
         <SubscriptionSection>
           <RoomHash className="hash">{ this.state.symKey || symKeyID }</RoomHash>
           <CopyToClipboard text={this.state.symKey || symKeyID} onCopy={() => this.setState({copied: true})}>
@@ -225,19 +243,7 @@ class App extends Component {
         </SubscriptionSection>
 
         <Chatbox ref={(el) => this.chatbox = el}>
-          { message && message.map((m, index) => {
-              const decapsulation = m.split('!encapsulation!')
-              const name = decapsulation[1]
-              const msg = decapsulation[0]
-
-              return (
-                <div key={ index }>
-                  <Name>{ name }</Name>
-                  <Message self={ this.props.name !== name }>{ msg }</Message>
-                </div>
-              )
-            })
-          }
+          { this.renderMessages() }
         </Chatbox>
 
         <InputContainer>
@@ -250,6 +256,7 @@ class App extends Component {
             }}
             value={ this.state.message }
           />
+
           <SendButton
             onClick={(e) => this.postMessage(e)}
             active={ this.state.message }>Send</SendButton>
