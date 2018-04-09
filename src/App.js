@@ -5,6 +5,154 @@ import { setName } from './actions'
 import { connect } from 'react-redux'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
+class App extends Component {
+  state = {
+    copied: false,
+    message: '',
+    name: '',
+    showOverlay: false,
+    symKey: null,
+    symKeyInput: ''
+  }
+
+  componentDidMount() {
+    if (this.props.name) {
+      this.subscribe(this.props.symKey)
+    }
+  }
+
+  componentDidUpdate(newProps, state) {
+    const chatboxEl = findDOMNode(this.chatbox)
+
+    if (this.props.name !== newProps.name) {
+      this.subscribe(this.props.symKey)
+    }
+
+    if (this.props.message.length !== newProps.message.length) {
+      chatboxEl.scrollTo(0, chatboxEl.scrollHeight)
+    }
+  }
+
+  subscribe(symKey) {
+    this.props.subscribe(symKey, this.props.name)
+    this.setState({ symKey, symKeyInput: '' })
+  }
+
+  postMessage(e) {
+    const { postMessage, publicKey } = this.props
+    const symKey = this.state.symKey || this.props.symKey
+    postMessage(this.props.name, this.state.message, symKey, publicKey)
+    this.setState({ message: '' })
+  }
+
+  showOverlay(show) {
+    this.setState({ showOverlay: show })
+  }
+
+  renderNamePrompt() {
+    return (
+      <Container>
+        <NamePrompt>
+          <div>What's your name?</div>
+          <ChatInput onChange={(e) => this.setState({ name: e.target.value })}/>
+          <Button onClick={() => this.props.setName(this.state.name)}>Start Chat</Button>
+        </NamePrompt>
+      </Container>
+    )
+  }
+
+  renderOverlay() {
+    return (
+      <RoomPrompt>
+        <div>Enter Room Hash</div>
+        <ChatInput onChange={(e) => this.setState({ symKeyInput: e.target.value })}/>
+        <div>
+          <Button onClick={() => this.showOverlay(false)}>Cancel</Button>
+          <Button onClick={() => {
+            if (this.props.subscription !== this.state.symKeyInput)
+            this.subscribe(this.state.symKeyInput)
+            this.showOverlay(false)
+          }}>Join Room</Button>
+        </div>
+      </RoomPrompt>
+    )
+  }
+
+  renderMessages() {
+    const { message } = this.props
+
+    return message && message.map((m, index) => {
+      const decapsulation = m.split('!encapsulation!')
+      const name = decapsulation[1]
+      const msg = decapsulation[0]
+
+      return (
+        <div key={ index }>
+          <Name>{ name }</Name>
+          <Message self={ this.props.name !== name }>{ msg }</Message>
+        </div>
+      )
+    })
+  }
+
+  render() {
+    const { name, symKeyID } = this.props
+
+    return name ? (
+      <Container>
+        { this.state.showOverlay && this.renderOverlay() }
+
+        <SubscriptionSection>
+          <RoomHash className="hash">{ this.state.symKey || symKeyID }</RoomHash>
+          <CopyToClipboard
+            text={ this.state.symKey || symKeyID }
+            onCopy={() => this.setState({copied: true})}
+          >
+            <Button>Copy Hash</Button>
+          </CopyToClipboard>
+          <Button onClick={() => this.showOverlay(true)}>Switch Rooms</Button>
+        </SubscriptionSection>
+
+        <Chatbox ref={(el) => this.chatbox = el}>
+          { this.renderMessages() }
+        </Chatbox>
+
+        <InputContainer>
+          <ChatInput
+            placeholder="Write a message..."
+            onChange={(e) => this.setState({ message: e.target.value })}
+            value={ this.state.message }
+            onKeyPress={(e) => {
+              if (e.key !== 'Enter') return
+              this.postMessage(e)
+            }}
+          />
+
+          <SendButton
+            onClick={(e) => this.postMessage(e)}
+            active={ this.state.message }>Send</SendButton>
+        </InputContainer>
+      </Container>
+    ) : this.renderNamePrompt()
+  }
+}
+
+const mapStateToProps = (state) => {
+  const { subscription, message, name } = state
+  console.log(state)
+  return {
+    subscription,
+    name,
+    message
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setName: (name) => dispatch(setName(name))
+  }
+}
+
 const Container = styled.div`
   background: #262626;
   border: 1px solid #D9D9D9;
@@ -141,143 +289,5 @@ const RoomPrompt = styled.div`
     max-height: 572px;
   }
 `
-
-class App extends Component {
-  state = {
-    copied: false,
-    message: '',
-    name: '',
-    showOverlay: false,
-    symKey: null,
-    symKeyInput: ''
-  }
-
-  componentDidMount() {
-    if (this.props.name) {
-      this.subscribe(this.props.symKey)
-    }
-  }
-
-  componentDidUpdate(newProps) {
-    const chatboxEl = findDOMNode(this.chatbox)
-
-    if (this.props.name !== newProps.name) {
-      this.subscribe(this.props.symKey)
-    }
-
-    if (this.props.message.length !== newProps.message.length) {
-      chatboxEl.scrollTo(0, chatboxEl.scrollHeight)
-    }
-  }
-
-  subscribe(symKey) {
-    this.props.subscribe(symKey, this.props.name)
-    this.setState({ symKey, symKeyInput: '' })
-  }
-
-  postMessage(e) {
-    const { postMessage, publicKey } = this.props
-    const symKey = this.state.symKey || this.props.symKey
-    postMessage(this.props.name, this.state.message, symKey, publicKey)
-    this.setState({ message: '' })
-  }
-
-  renderNamePrompt() {
-    return (
-      <Container>
-        <NamePrompt>
-          <div>What's your name?</div>
-          <ChatInput onChange={(e) => this.setState({ name: e.target.value })}/>
-          <Button onClick={() => this.props.setName(this.state.name)}>Start Chat</Button>
-        </NamePrompt>
-      </Container>
-    )
-  }
-
-  renderOverlay() {
-    return (
-      <RoomPrompt>
-        <div>Enter Room Hash</div>
-        <ChatInput onChange={(e) => this.setState({ symKeyInput: e.target.value })}/>
-        <div>
-          <Button onClick={() => { this.setState({ showOverlay: false }) }}>Cancel</Button>
-          <Button onClick={() => {
-            this.subscribe(this.state.symKeyInput)
-            this.setState({ showOverlay: false })
-          }}>Join Room</Button>
-        </div>
-      </RoomPrompt>
-    )
-  }
-
-  renderMessages() {
-    const { message } = this.props
-
-    return message && message.map((m, index) => {
-      const decapsulation = m.split('!encapsulation!')
-      const name = decapsulation[1]
-      const msg = decapsulation[0]
-
-      return (
-        <div key={ index }>
-          <Name>{ name }</Name>
-          <Message self={ this.props.name !== name }>{ msg }</Message>
-        </div>
-      )
-    })
-  }
-
-  render() {
-    const { name, symKeyID } = this.props
-
-    return name ? (
-      <Container>
-        { this.state.showOverlay && this.renderOverlay() }
-
-        <SubscriptionSection>
-          <RoomHash className="hash">{ this.state.symKey || symKeyID }</RoomHash>
-          <CopyToClipboard text={this.state.symKey || symKeyID} onCopy={() => this.setState({copied: true})}>
-            <Button>Copy Hash</Button>
-          </CopyToClipboard>
-          <Button onClick={() => this.setState({ showOverlay: true })}>Switch Rooms</Button>
-        </SubscriptionSection>
-
-        <Chatbox ref={(el) => this.chatbox = el}>
-          { this.renderMessages() }
-        </Chatbox>
-
-        <InputContainer>
-          <ChatInput
-            placeholder="Write a message..."
-            onChange={(e) => this.setState({ message: e.target.value })}
-            onKeyPress={(e) => {
-              if (e.key !== 'Enter') return
-              this.postMessage(e)
-            }}
-            value={ this.state.message }
-          />
-
-          <SendButton
-            onClick={(e) => this.postMessage(e)}
-            active={ this.state.message }>Send</SendButton>
-        </InputContainer>
-      </Container>
-    ) : this.renderNamePrompt()
-  }
-}
-
-const mapStateToProps = (state) => {
-  const { message, name } = state
-  return {
-    name,
-    message,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setName: (name) => dispatch(setName(name))
-  }
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

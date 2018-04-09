@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import promiseMiddleware from 'redux-promise';
 import reducers from './reducers'
 import App from './App'
-import { latestMessage, setName } from './actions'
+import { setSubscription, latestMessage, setName } from './actions'
 import { toAscii, toHex } from './utils'
 import './global.styles.css'
 
@@ -45,6 +45,8 @@ Promise.all([
           .on('data', (message) => {
             store.dispatch(latestMessage(toAscii(message.payload)))
           })
+
+        store.dispatch(setSubscription(symKeyID))
       })
   }
 
