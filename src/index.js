@@ -28,7 +28,6 @@ Promise.all([
   }
 
   const subscribe = (symKeyID = identities[0], name) => {
-    console.log(name, 'asdff')
     store.dispatch(setName(name))
 
     shh.subscribe('messages', {
