@@ -4,7 +4,6 @@ export default (state = {message: ''}, action) => {
       window.sessionStorage.setItem('name', action.payload)
       return { ...state, name: action.payload }
     case 'SUBSCRIPTION':
-      console.log(action)
       return { ...state, subscription: action.payload }
     case 'MESSAGE':
       return { ...state, message: [ ...state.message, action.payload ] }

@@ -276,7 +276,7 @@ const RoomPrompt = styled.div`
 
 const mapStateToProps = (state) => {
   const { subscription, message, name } = state
-  console.log(state)
+
   return {
     subscription,
     name,

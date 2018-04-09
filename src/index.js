@@ -35,7 +35,7 @@ Promise.all([
 
     store.dispatch(setName(name))
 
-    shh.getInfo().then(console.log)
+    shh.getInfo().then(console.info)
 
     shh.newMessageFilter(options)
       .then((id) => shh.getFilterMessages(id))
