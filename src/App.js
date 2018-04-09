@@ -137,22 +137,6 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const { subscription, message, name } = state
-  console.log(state)
-  return {
-    subscription,
-    name,
-    message
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setName: (name) => dispatch(setName(name))
-  }
-}
-
 const Container = styled.div`
   background: #262626;
   border: 1px solid #D9D9D9;
@@ -289,5 +273,21 @@ const RoomPrompt = styled.div`
     max-height: 572px;
   }
 `
+
+const mapStateToProps = (state) => {
+  const { subscription, message, name } = state
+  console.log(state)
+  return {
+    subscription,
+    name,
+    message
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setName: (name) => dispatch(setName(name))
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
